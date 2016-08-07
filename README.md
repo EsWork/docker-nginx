@@ -31,7 +31,7 @@ ARG WITH_UPSTREAM_CHECK=true
 
 ## Installation
 
-自动化构建图像的可用[Dockerhub](https://hub.docker.com/r/johnwu/nginx)和推荐的安装方法
+自动化构建镜像的可用[Dockerhub](https://hub.docker.com/r/johnwu/nginx)和推荐的安装方法
 
 ```bash
 docker pull johnwu/nginx:1.10.1
@@ -94,7 +94,7 @@ docker exec -it nginx tail -f /var/log/nginx/access.log
 ```bash
 docker run -p 80:80 --name nginx -d \
 johnwu/nginx \
-nginx -g "daemon off;" -c /etc/nginx/test.conf 
+nginx -c /etc/nginx/test.conf 
 ```
 
 ## 地址测试
