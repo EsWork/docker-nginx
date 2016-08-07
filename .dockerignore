@@ -1,0 +1,8 @@
+.git
+README.md
+LICENSE
+Makefile
+VERSION
+.travis.yml
+.nginx.conf
+test.conf
