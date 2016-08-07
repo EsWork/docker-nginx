@@ -1,0 +1,22 @@
+language: bash
+services: docker
+
+branches: 
+  only: 
+    - master
+
+install:
+  - docker build -t johnwu/nginx .
+  
+script: 
+  - docker run --name nginx -d -p 30080:80 johnwu/nginx; sleep 10
+  - docker ps -a | grep -q nginx
+  - curl --retry 10 --retry-delay 2 -v http://127.0.0.1:30080/index.html
+  - curl -v http://127.0.0.1:30080/purge/index.html
+  - curl -v http://127.0.0.1:30080/lua
+  - curl -v http://127.0.0.1:30080/status1
+  - curl -v http://127.0.0.1:30080/status2
+
+after_script:
+  - docker rm nginx
+  - docker rmi johnwu/nginx
