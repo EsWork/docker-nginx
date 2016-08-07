@@ -2,7 +2,7 @@
 
 # Supported tags and respective `Dockerfile` links
 
-- [`latest` , `0.1`  (0.1/Dockerfile)](https://github.com/vla/docker-nginx/blob/master/Dockerfile)
+- [`latest` , `1.10.1`  (1.10.1/Dockerfile)](https://github.com/vla/docker-nginx/blob/master/Dockerfile)
 
 # Introduction
 

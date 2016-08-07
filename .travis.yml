@@ -9,7 +9,7 @@ install:
   - docker build -t johnwu/nginx .
   
 script: 
-  - docker run --name nginx -d -p 30080:80 johnwu/nginx; sleep 10
+  - docker run --name nginx -d -p 30080:80 johnwu/nginx nginx -c /etc/nginx/test.conf; sleep 10
   - docker ps -a | grep -q nginx
   - curl --retry 10 --retry-delay 2 -v http://127.0.0.1:30080/index.html
   - curl -v http://127.0.0.1:30080/purge/index.html
