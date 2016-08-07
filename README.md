@@ -50,7 +50,7 @@ docker build -t johnwu/nginx github.com/johnwu/docker-nginx
 ```bash
 docker run --name nginx -d \
   -p 80:80 --restart=always \
-  johnwu/nginx-loup 
+  johnwu/nginx 
 ```
 
 或者您可以使用示例[docker-compose.yml](docker-compose.yml)文件启动容器
