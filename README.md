@@ -40,7 +40,7 @@ docker pull johnwu/nginx:1.10.1
 或者你可以自己构建镜像
 
 ```bash
-docker build -t johnwu/nginx github.com/johnwu/docker-nginx
+docker build -t johnwu/nginx github.com/vla/docker-nginx
 ```
 
 ## Quickstart
