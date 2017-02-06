@@ -2,11 +2,11 @@
 
 # Supported tags and respective `Dockerfile` links
 
-- [`latest` , `1.10.1`  (1.10.1/Dockerfile)](https://github.com/vla/docker-nginx/blob/master/Dockerfile)
+- [`latest` , `1.10.3`  (1.10.3/Dockerfile)](https://github.com/vla/docker-nginx/blob/master/Dockerfile)
 
 # Introduction
 
-Nginx-1.10.1 镜像集成模块列表：
+Nginx-1.10.3 镜像集成模块列表：
 - pagespeed
 - luaJIT
 - lua-nginx-module
