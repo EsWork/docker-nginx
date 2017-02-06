@@ -2,22 +2,18 @@
 set -e
 
 NGINX_DOWNLOAD_URL="http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz"
-NGX_PAGESPEED_DOWNLOAD_URL="https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}-beta.tar.gz"
-PSOL_DOWNLOAD_URL="https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz"
 NGINX_DEVEL_KIT_URL="https://github.com/simpl/ngx_devel_kit/archive/v${NGINX_DEVEL_KIT_VERSION}.tar.gz"
 LUA_URL="https://github.com/openresty/lua-nginx-module/archive/v${LUA_MODULE_VERSION}.tar.gz"
 NGINX_CACHE_PURGE_URL="https://github.com/FRiCKLE/ngx_cache_purge/archive/${NGINX_CACHE_PURGE_VERSION}.tar.gz"
 NGINX_UPSTREAM_CHECK_URL="https://github.com/yaoweibin/nginx_upstream_check_module/archive/master.tar.gz"
 
-RUN_DEPENDENCIES
-BUILD_DEPENDENCIES="gcc g++  patch libc-dev make openssl-dev \
-pcre-dev zlib-dev linux-headers luajit-dev\
-curl gnupg libxslt-dev gd-dev perl-dev geoip-dev"
+BUILD_DEPENDENCIES="gcc patch libc-dev make openssl-dev \
+pcre-dev zlib-dev linux-headers luajit-dev \
+gnupg libxslt-dev gd-dev perl-dev geoip-dev"
 
 ${WITH_DEBUG} && {
   EXTRA_ARGS="${EXTRA_ARGS} --with-debug"
 }
-
 
 mkdir -p ${NGINX_SETUP_DIR}
 cd ${NGINX_SETUP_DIR}
@@ -46,26 +42,14 @@ ${WITH_UPSTREAM_CHECK} && {
   tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/ngx_upstream_check.tar"
 }
 
-# prepare pagespeed module support
-${WITH_PAGESPEED} && {
-  EXTRA_ARGS="${EXTRA_ARGS} --add-module=${NGINX_SETUP_DIR}/ngx_pagespeed-${NPS_VERSION}-beta"
-  curl -fSL "${NGX_PAGESPEED_DOWNLOAD_URL}" -o "${NGINX_SETUP_DIR}/ngx_pagespeed.tar"
-  tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/ngx_pagespeed.tar"
-
-  curl -fSL "${PSOL_DOWNLOAD_URL}" -o "${NGINX_SETUP_DIR}/psol.tar"
-  tar -zxC "${NGINX_SETUP_DIR}/ngx_pagespeed-${NPS_VERSION}-beta" -f "${NGINX_SETUP_DIR}/psol.tar"
-}
-
 ${WITH_LUA} && {
   EXTRA_ARGS="${EXTRA_ARGS} --add-module=${NGINX_SETUP_DIR}/lua-nginx-module-${LUA_MODULE_VERSION}"
 
   curl -fSL "${LUA_URL}" -o "${NGINX_SETUP_DIR}/lua_module.tar"
   tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/lua_module.tar"
 
-  cd ${NGINX_SETUP_DIR}/LuaJIT-${LUAJIT_VERSION}
-  make -j$(getconf _NPROCESSORS_ONLN) && make install
-  export LUAJIT_LIB=/usr/local/lib
-  export LUAJIT_INC=/usr/local/include/luajit-2.0
+  export LUAJIT_LIB=/usr/lib
+  export LUAJIT_INC=/usr/include/luajit-2.1
 }
 
 #nginx user role
@@ -163,8 +147,24 @@ ln -sf /usr/lib/nginx/modules /etc/nginx/modules
 strip /usr/sbin/nginx*
 strip /usr/lib/nginx/modules/*.so
 
+apk add --no-cache --virtual .gettext gettext
+mv /usr/bin/envsubst /tmp/
+
+BUILD_DEPENDENCIES="$( \
+		scanelf --needed --nobanner /usr/sbin/nginx /usr/lib/nginx/modules/*.so /tmp/envsubst \
+			| awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
+			| sort -u \
+			| xargs -r apk info --installed \
+			| sort -u \
+)"
+
+apk add --no-cache --virtual .nginx-rundeps $BUILD_DEPENDENCIES
+
 # cleanup
 apk del .build-deps 
+apk del .gettext
+mv /tmp/envsubst /usr/local/bin/
+cd /
 rm -rf ${NGINX_SETUP_DIR}/
 
 # forward request and error logs to docker log collector
