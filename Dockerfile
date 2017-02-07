@@ -19,7 +19,7 @@ ARG WITH_UPSTREAM_CHECK=true
 
 
 COPY setup/ ${NGINX_SETUP_DIR}/
-RUN bash ${NGINX_SETUP_DIR}/install.sh
+RUN ${NGINX_SETUP_DIR}/install.sh
 
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
