@@ -18,12 +18,9 @@ Dockerfile文件的`ARG`参数可控制`开启/关闭`相应功能
 
 ```
 ARG WITH_DEBUG=false
-ARG WITH_NDK=false
+ARG WITH_NDK=true
 ARG WITH_LUA=true
 ARG WITH_PURGE=true
-ARG WITH_HTTP_IMAGE_FILTER=false
-ARG WITH_HTTP_XSLT=false
-ARG WITH_PAGESPEED=true
 ARG WITH_UPSTREAM_CHECK=true
 ```
 
@@ -34,7 +31,7 @@ ARG WITH_UPSTREAM_CHECK=true
 自动化构建镜像的可用[Dockerhub](https://hub.docker.com/r/johnwu/nginx)和推荐的安装方法
 
 ```bash
-docker pull johnwu/nginx:1.10.1
+docker pull johnwu/nginx:1.10.3
 ```
 
 或者你可以自己构建镜像
@@ -93,8 +90,7 @@ docker exec -it nginx tail -f /var/log/nginx/access.log
 
 ```bash
 docker run -p 80:80 --name nginx -d \
-johnwu/nginx \
-nginx -c /etc/nginx/test.conf 
+johnwu/nginx -c /etc/nginx/test.conf 
 ```
 
 ## 地址测试
