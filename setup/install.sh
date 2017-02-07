@@ -8,7 +8,7 @@ NGINX_CACHE_PURGE_URL="https://github.com/FRiCKLE/ngx_cache_purge/archive/${NGIN
 NGINX_UPSTREAM_CHECK_URL="https://github.com/yaoweibin/nginx_upstream_check_module/archive/master.tar.gz"
 
 BUILD_DEPENDENCIES="gcc patch libc-dev make openssl-dev \
-pcre-dev zlib-dev linux-headers luajit-dev \
+curl pcre-dev zlib-dev linux-headers luajit-dev \
 gnupg libxslt-dev gd-dev perl-dev geoip-dev"
 
 ${WITH_DEBUG} && {
@@ -150,7 +150,7 @@ strip /usr/lib/nginx/modules/*.so
 apk add --no-cache --virtual .gettext gettext
 mv /usr/bin/envsubst /tmp/
 
-BUILD_DEPENDENCIES="$( \
+RUN_DEPENDENCIES="$( \
 		scanelf --needed --nobanner /usr/sbin/nginx /usr/lib/nginx/modules/*.so /tmp/envsubst \
 			| awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
 			| sort -u \
@@ -158,7 +158,7 @@ BUILD_DEPENDENCIES="$( \
 			| sort -u \
 )"
 
-apk add --no-cache --virtual .nginx-rundeps $BUILD_DEPENDENCIES
+apk add --no-cache --virtual .nginx-rundeps $RUN_DEPENDENCIES
 
 # cleanup
 apk del .build-deps 
