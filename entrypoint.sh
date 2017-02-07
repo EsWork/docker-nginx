@@ -28,10 +28,11 @@ if [[ ${1:0:1} = '-' ]]; then
   set --
 elif [[ ${1} == nginx || ${1} == $(which nginx) ]]; then
   #e.g: nginx -g "daemon off;"
-  EXTRA_ARGS="${@:2}"
+  EXTRA_ARGS="${@:5}" #fix busybox
+  #EXTRA_ARGS="${@:2}"
   set --
 fi
-echo ${1}
+
 if [[ -z ${1} ]]; then
   echo "Starting nginx..."
   exec $(which nginx) -c /etc/nginx/nginx.conf -g "daemon off;" ${EXTRA_ARGS}

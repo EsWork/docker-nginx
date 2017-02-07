@@ -90,7 +90,7 @@ docker exec -it nginx tail -f /var/log/nginx/access.log
 
 ```bash
 docker run -p 80:80 --name nginx -d \
-johnwu/nginx -c /etc/nginx/test.conf 
+johnwu/nginx nginx -c /etc/nginx/test.conf 
 ```
 
 ## 地址测试
