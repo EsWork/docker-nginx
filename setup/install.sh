@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-sed '1i\http://mirrors.ustc.edu.cn/alpine/v3.5/main/' /etc/apk/repositories
+#sed '1i\http://mirrors.ustc.edu.cn/alpine/v3.5/main/' /etc/apk/repositories
 
 NGINX_DOWNLOAD_URL="http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz"
 NGINX_DEVEL_KIT_URL="https://github.com/simpl/ngx_devel_kit/archive/v${NGINX_DEVEL_KIT_VERSION}.tar.gz"
