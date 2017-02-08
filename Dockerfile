@@ -28,4 +28,3 @@ EXPOSE 80/tcp 443/tcp
 
 VOLUME ["${NGINX_SITECONF_DIR}"]
 ENTRYPOINT ["/sbin/entrypoint.sh"]
-CMD ["/usr/sbin/nginx"]
