@@ -22,18 +22,18 @@ create_tmp_dir
 create_siteconf_dir
 
 #允许参数传递到nginx
-if [[ ${1:0:1} = '-' ]]; then
+if [[ "${1:0:1}" = '-' ]]; then
   #e.g: -g "daemon off;"
   EXTRA_ARGS="$@"
   set --
-elif [[ ${1} == nginx || ${1} == $(which nginx) ]]; then
+elif [[ "${1}" == nginx || "${1}" == $(which nginx) ]]; then
   #e.g: nginx -g "daemon off;"
   EXTRA_ARGS="${@:5}" #fix busybox
   #EXTRA_ARGS="${@:2}"
   set --
 fi
 
-if [[ -z ${1} ]]; then
+if [[ -z "${1}" ]]; then
   echo "Starting nginx..."
   exec $(which nginx) -c /etc/nginx/nginx.conf -g "daemon off;" ${EXTRA_ARGS}
 else

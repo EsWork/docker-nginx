@@ -27,14 +27,14 @@ apk add --no-cache --virtual .build-deps ${BUILD_DEPENDENCIES}
 ${WITH_NDK} && {
   EXTRA_ARGS="${EXTRA_ARGS} --add-module=${NGINX_SETUP_DIR}/ngx_devel_kit-${NGINX_DEVEL_KIT_VERSION}"
   curl -fSL  "${NGINX_DEVEL_KIT_URL}" -o "${NGINX_SETUP_DIR}/ngx_devel_kit.tar"
-  tar -zxC  "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/ngx_devel_kit.tar" 
+  tar -zxC  "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/ngx_devel_kit.tar"
 }
 
 # prepare ngx_cache_purge module support
 ${WITH_PURGE} && {
   EXTRA_ARGS="${EXTRA_ARGS} --add-module=${NGINX_SETUP_DIR}/ngx_cache_purge-${NGINX_CACHE_PURGE_VERSION}"
   curl -fSL  "${NGINX_CACHE_PURGE_URL}" -o "${NGINX_SETUP_DIR}/ngx_cache_purge.tar"
-  tar -zxC  "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/ngx_cache_purge.tar" 
+  tar -zxC  "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/ngx_cache_purge.tar"
 }
 
 # prepare ngx_upstream_check module support
@@ -163,12 +163,12 @@ RUN_DEPENDENCIES="$( \
 apk add --no-cache --virtual .nginx-rundeps $RUN_DEPENDENCIES
 
 # cleanup
-apk del .build-deps 
+apk del .build-deps
 apk del .gettext
 mv /tmp/envsubst /usr/local/bin/
 cd /
 rm -rf ${NGINX_SETUP_DIR}/
 
 # forward request and error logs to docker log collector
-ln -sf /dev/stdout /var/log/nginx/access.log 
+ln -sf /dev/stdout /var/log/nginx/access.log
 ln -sf /dev/stderr /var/log/nginx/error.log
