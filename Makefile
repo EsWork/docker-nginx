@@ -1,7 +1,7 @@
 all: build
 
 build:
-	@docker build --tag=johnwu/nginx .
+	@docker build --tag=eswork/nginx .
 
 release: build
-	@docker build --tag=johnwu/nginx:$(shell cat VERSION) .
+	@docker build --tag=eswork/nginx:$(shell cat VERSION) .

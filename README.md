@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/vla/docker-nginx.svg?branch=master)](https://travis-ci.org/vla/docker-nginx)
+[![Build Status](https://travis-ci.org/EsWork/docker-nginx.svg?branch=master)](https://travis-ci.org/EsWork/docker-nginx)
 
-# Supported tags and respective `Dockerfile` links
+## Supported tags and respective `Dockerfile` links
 
-- [`latest` , `1.10.3`  (1.10.3/Dockerfile)](https://github.com/vla/docker-nginx/blob/master/Dockerfile)
+- [`latest` , `1.10.3`  (1.10.3/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile)
 
-# Introduction
+## Introduction
 
 Nginx-1.10.3 镜像集成模块列表：
 - pagespeed
@@ -24,42 +24,43 @@ ARG WITH_PURGE=true
 ARG WITH_UPSTREAM_CHECK=true
 ```
 
-# Getting started
-
 ## Installation
+---
 
-自动化构建镜像的可用[Dockerhub](https://hub.docker.com/r/johnwu/nginx)和推荐的安装方法
+自动化构建镜像的可用[Dockerhub](https://hub.docker.com/r/eswork/nginx)和推荐的安装方法
 
 ```bash
-docker pull johnwu/nginx:1.10.3
+docker pull eswork/nginx:1.10.3
 ```
 
 或者你可以自己构建镜像
 
 ```bash
-docker build -t johnwu/nginx github.com/vla/docker-nginx
+docker build -t eswork/nginx github.com/eswork/docker-nginx
 ```
 
 ## Quickstart
+---
 
 运行nginx：
 
 ```bash
 docker run --name nginx -d \
   -p 80:80 --restart=always \
-  johnwu/nginx 
+  eswork/nginx 
 ```
 
 或者您可以使用示例[docker-compose.yml](docker-compose.yml)文件启动容器
 
 ## Configuration
+---
 
 自定义您的配置文件覆盖容器默认的`/etc/nginx/nginx.conf`配置
 
 ```bash
 docker run --name nginx -d \
 -v /some/nginx.conf:/etc/nginx/nginx.conf:ro \
-johnwu/nginx
+eswork/nginx
 ```
 
 挂载您自己的`sites-enabled`目录到`/etx/nginx/sites-enabled`
@@ -68,7 +69,7 @@ johnwu/nginx
 docker run --name nginx  -d \
 -v /some/nginx.conf:/etc/nginx/nginx.conf:ro \
 -v /srv/docker/nginx/sites-enabled:/etc/nginx/sites-enabled \
-johnwu/nginx
+eswork/nginx
 ```
 
 重新加载的NGINX配置使用`kill -s HUP`发送到容器上
@@ -78,22 +79,24 @@ docker kill -s HUP nginx
 ```
 
 ## Logs
+---
 
 访问Nginx日志位于`/var/log/nginx`
 ```bash
 docker exec -it nginx tail -f /var/log/nginx/access.log
 ```
 
-# Test
+## Test
+---
 
-## 执行以下命令启动容器
+### 执行以下命令启动容器
 
 ```bash
 docker run -p 80:80 --name nginx -d \
-johnwu/nginx nginx -c /etc/nginx/test.conf 
+eswork/nginx nginx -c /etc/nginx/test.conf 
 ```
 
-## 地址测试
+### 测试地址
 
 
 先访问`http://localhost/index.html` ，然后再次访问`http://localhost/purge/index.html`会看到效果  

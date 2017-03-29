@@ -6,10 +6,10 @@ branches:
     - master
 
 install:
-  - docker build -t johnwu/nginx .
+  - docker build -t eswork/nginx .
   
 script: 
-  - docker run --name nginx -d -p 30080:80 johnwu/nginx -c /etc/nginx/test.conf; sleep 5
+  - docker run --name nginx -d -p 30080:80 eswork/nginx -c /etc/nginx/test.conf; sleep 5
   - docker ps -a | grep -q nginx
   - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30080/index.html
   - curl -v http://127.0.0.1:30080/purge/index.html
