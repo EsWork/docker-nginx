@@ -4,7 +4,8 @@
 
 - [`latest` , `1.10.3`  (1.10.3/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile)
 
-## Introduction
+Introduction
+---
 
 Nginx-1.10.3 镜像集成模块列表：
 - pagespeed
@@ -24,7 +25,7 @@ ARG WITH_PURGE=true
 ARG WITH_UPSTREAM_CHECK=true
 ```
 
-## Installation
+Installation
 ---
 
 自动化构建镜像的可用[Dockerhub](https://hub.docker.com/r/eswork/nginx)和推荐的安装方法
@@ -39,7 +40,7 @@ docker pull eswork/nginx:1.10.3
 docker build -t eswork/nginx github.com/eswork/docker-nginx
 ```
 
-## Quickstart
+Quickstart
 ---
 
 运行nginx：
@@ -52,7 +53,7 @@ docker run --name nginx -d \
 
 或者您可以使用示例[docker-compose.yml](docker-compose.yml)文件启动容器
 
-## Configuration
+Configuration
 ---
 
 自定义您的配置文件覆盖容器默认的`/etc/nginx/nginx.conf`配置
@@ -78,7 +79,7 @@ eswork/nginx
 docker kill -s HUP nginx
 ```
 
-## Logs
+Logs
 ---
 
 访问Nginx日志位于`/var/log/nginx`
@@ -86,7 +87,7 @@ docker kill -s HUP nginx
 docker exec -it nginx tail -f /var/log/nginx/access.log
 ```
 
-## Test
+Test
 ---
 
 ### 执行以下命令启动容器
