@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/EsWork/docker-nginx.svg?branch=master)](https://travis-ci.org/EsWork/docker-nginx)
+[![Build Status](https://travis-ci.org/EsWork/docker-nginx.svg?branch=master)](https://travis-ci.org/EsWork/docker-nginx) 
+[![](https://images.microbadger.com/badges/image/eswork/nginx.svg)](https://microbadger.com/images/eswork/nginx "Get your own image badge on microbadger.com")
 
 ## Supported tags and respective `Dockerfile` links
 
