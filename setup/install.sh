@@ -67,7 +67,7 @@ tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/nginx.tar"
 cd ${NGINX_SETUP_DIR}/nginx-${NGINX_VERSION}
 
 if [[ ${WITH_UPSTREAM_CHECK} ]];then
-   patch -p0 < ${NGINX_SETUP_DIR}/nginx_upstream_check_module-master/check_1.9.2+.patch
+   patch -p0 < ${NGINX_SETUP_DIR}/nginx_upstream_check_module-master/check_1.11.5+.patch
 fi
 
 ./configure \

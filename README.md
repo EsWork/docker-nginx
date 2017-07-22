@@ -3,12 +3,12 @@
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`latest` , `1.10.3`  (1.10.3/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile)
+- [`latest` , `1.12.1`  (1.12.1/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile)
 
 Introduction
 ---
 
-Nginx-1.10.3 镜像集成模块列表：
+Nginx 镜像集成模块列表：
 - pagespeed
 - luaJIT
 - lua-nginx-module
@@ -32,7 +32,7 @@ Installation
 自动化构建镜像的可用[Dockerhub](https://hub.docker.com/r/eswork/nginx)和推荐的安装方法
 
 ```bash
-docker pull eswork/nginx:1.10.3
+docker pull eswork/nginx
 ```
 
 或者你可以自己构建镜像
