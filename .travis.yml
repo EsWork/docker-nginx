@@ -13,6 +13,5 @@ script:
   - docker ps -a | grep -q nginx
   - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30080/index.html
   - curl -v http://127.0.0.1:30080/purge/index.html
-  # - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30080/lua
   - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30080/status1
   - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30080/status2

@@ -2,9 +2,10 @@ FROM alpine:3.5
 LABEL maintainer "v.la@live.cn"
 
 ENV NGINX_VERSION=1.12.1 \
-    LUA_MODULE_VERSION=0.10.8 \
+    LUA_MODULE_VERSION=0.10.9rc8  \
     NGINX_DEVEL_KIT_VERSION=0.3.0 \
     NGINX_CACHE_PURGE_VERSION=2.3 \
+    GEOIP_VERSION=1.6.11\
     NGINX_USER=nginx \
     NGINX_SITECONF_DIR=/etc/nginx/sites-enabled \
     NGINX_LOG_DIR=/var/log/nginx \
@@ -13,7 +14,7 @@ ENV NGINX_VERSION=1.12.1 \
 
 ARG WITH_DEBUG=false
 ARG WITH_NDK=true
-ARG WITH_LUA=false
+ARG WITH_LUA=true
 ARG WITH_PURGE=true
 ARG WITH_UPSTREAM_CHECK=true
 

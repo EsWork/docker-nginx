@@ -8,10 +8,11 @@ NGINX_DEVEL_KIT_URL="https://github.com/simpl/ngx_devel_kit/archive/v${NGINX_DEV
 LUA_URL="https://github.com/openresty/lua-nginx-module/archive/v${LUA_MODULE_VERSION}.tar.gz"
 NGINX_CACHE_PURGE_URL="https://github.com/FRiCKLE/ngx_cache_purge/archive/${NGINX_CACHE_PURGE_VERSION}.tar.gz"
 NGINX_UPSTREAM_CHECK_URL="https://github.com/yaoweibin/nginx_upstream_check_module/archive/master.tar.gz"
+MAXMIND_URL="https://github.com/maxmind/geoip-api-c/releases/download/v${GEOIP_VERSION}/GeoIP-${GEOIP_VERSION}.tar.gz"
 
 BUILD_DEPENDENCIES="gcc patch libc-dev make openssl-dev \
 curl pcre-dev zlib-dev linux-headers luajit-dev \
-gnupg libxslt-dev gd-dev perl-dev geoip-dev"
+gnupg libxslt-dev gd-dev perl-dev git geoip-dev ca-certificates"
 
 ${WITH_DEBUG} && {
   EXTRA_ARGS="${EXTRA_ARGS} --with-debug"
@@ -21,6 +22,7 @@ mkdir -p ${NGINX_SETUP_DIR}
 cd ${NGINX_SETUP_DIR}
 
 #build dependencies
+echo "install build-deps $BUILD_DEPENDENCIES"
 apk add --no-cache --virtual .build-deps ${BUILD_DEPENDENCIES}
 
 # prepare ngx_devel_kit support
@@ -53,6 +55,12 @@ ${WITH_LUA} && {
   export LUAJIT_LIB=/usr/lib
   export LUAJIT_INC=/usr/include/luajit-2.1
 }
+
+# install geoip
+curl -fSL $MAXMIND_URL -o "${NGINX_SETUP_DIR}/geoip_module.tar"
+tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/geoip_module.tar"
+cd ${NGINX_SETUP_DIR}/GeoIP-${GEOIP_VERSION}
+./configure && make && make check && make install 
 
 #nginx user role
 mkdir -p /var/www/nginx
@@ -87,7 +95,6 @@ fi
   --http-scgi-temp-path=${NGINX_TEMP_DIR}/scgi \
   --http-uwsgi-temp-path=${NGINX_TEMP_DIR}/uwsgi \
   --with-pcre-jit \
-  --with-ipv6 \
   --with-http_ssl_module \
   --with-http_stub_status_module \
   --with-http_realip_module \
@@ -103,12 +110,17 @@ fi
   --with-http_sub_module \
   --with-http_flv_module \
   --with-http_mp4_module \
+  --with-http_slice_module \
   --with-stream \
   --with-stream_ssl_module \
+  --with-stream_ssl_preread_module \
+  --with-stream_realip_module \
+  --with-stream_geoip_module=dynamic \
   --with-mail \
   --with-mail_ssl_module \
   --with-threads \
   --with-file-aio \
+  --with-compat \
   --with-http_xslt_module=dynamic \
   --with-http_image_filter_module=dynamic \
 	--with-http_geoip_module=dynamic \
@@ -159,7 +171,7 @@ RUN_DEPENDENCIES="$( \
 			| xargs -r apk info --installed \
 			| sort -u \
 )"
-
+echo "install rundeps $RUN_DEPENDENCIES"
 apk add --no-cache --virtual .nginx-rundeps $RUN_DEPENDENCIES
 
 # cleanup
