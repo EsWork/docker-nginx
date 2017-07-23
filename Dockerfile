@@ -1,5 +1,4 @@
 FROM alpine:3.5
-LABEL maintainer "v.la@live.cn"
 
 ENV UID=1000 GID=1000 \ 
     GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
@@ -31,5 +30,10 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 8000/tcp 4430/tcp
 
-VOLUME ["${NGINX_SITECONF_DIR}"]
+VOLUME ["${NGINX_SITECONF_DIR}","/etc/nginx/conf.d","etc/nginx/certs","/var/log/nginx","/var/www"]
+
+LABEL description="nginx built from source" \
+      nginx="nginx ${NGINX_VERSION}" \
+      maintainer="JohnWu <v.la@live.cn>"
+
 ENTRYPOINT ["/sbin/entrypoint.sh"]

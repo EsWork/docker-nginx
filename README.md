@@ -5,15 +5,34 @@
 
 - [`latest` , `1.12.1`  (1.12.1/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile)
 
-Introduction
+Features
 ---
 
-Nginx 镜像集成模块列表：
-- luaJIT
-- lua-nginx-module
-- nginx_upstream_check_module
-- nginx_cache_purge_module
-- nginx_devel_kit
+- 基于Alpine Linux
+- 避免使用root运行
+- AIO线程支持
+- 启用PCRE-jit
+- Brotli压缩算法支持
+- Lua脚本支持
+- [cache-purge](https://github.com/FRiCKLE/ngx_cache_purge)
+- [headers-more](https://github.com/openresty/headers-more-nginx-module)
+- [upstream_check](https://github.com/yaoweibin/nginx_upstream_check_module)
+
+Notes
+---
+
+- nginx默认端口为8000/4430，而不是80/443，如果自定义nginx.conf配置的端口请不要使用`1024`以下的端口(`使用root的UID/GID不限制`)
+
+Volumes
+---
+- **/etc/nginx/sites-enabled** : vhosts文件 (*.conf)
+- **/etc/nginx/conf.d** : 额外的配置文件 (*.conf)
+- **/etc/nginx/certs** : SSL/TLS certificates
+- **/var/log/nginx** : nginx logs
+- **/var/www** : 站点目录
+
+Build-time variables
+---
 
 Dockerfile文件的`ARG`参数可控制`开启/关闭`相应功能
 
@@ -24,6 +43,12 @@ ARG WITH_LUA=true
 ARG WITH_PURGE=true
 ARG WITH_UPSTREAM_CHECK=true
 ```
+
+Environment variables
+---
+
+- **GID** : nginx group id *(default : 1000)*
+- **UID** : nginx user id *(default : 1000)*
 
 Installation
 ---
@@ -47,7 +72,7 @@ Quickstart
 
 ```bash
 docker run --name nginx -d \
-  -p 80:80 --restart=always \
+  -p 8000:8000 --restart=always \
   eswork/nginx 
 ```
 
@@ -60,7 +85,7 @@ Configuration
 
 ```bash
 docker run --name nginx -d \
--v /some/nginx.conf:/etc/nginx/nginx.conf:ro \
+-p 8000:8000 -v /some/nginx.conf:/etc/nginx/nginx.conf:ro \
 eswork/nginx
 ```
 
@@ -68,6 +93,7 @@ eswork/nginx
 
 ```bash
 docker run --name nginx  -d \
+-p 8000:8000 \
 -v /some/nginx.conf:/etc/nginx/nginx.conf:ro \
 -v /srv/docker/nginx/sites-enabled:/etc/nginx/sites-enabled \
 eswork/nginx
@@ -93,21 +119,21 @@ Test
 ### 执行以下命令启动容器
 
 ```bash
-docker run -p 80:80 --name nginx -d \
+docker run -p 8000:8000 --name nginx -d \
 eswork/nginx nginx -c /etc/nginx/test.conf 
 ```
 
 ### 测试地址
 
 
-先访问`http://localhost/index.html` ，然后再次访问`http://localhost/purge/index.html`会看到效果  
-其实访问`http://localhost/index.html`地址已经使用反向代理到`http://localhost:8045/index.html`页面上
+先访问`http://localhost:8000/index.html` ，然后再次访问`http://localhost:8000/purge/index.html`会看到效果  
 
+其实访问`http://localhost:8000/index.html`地址已经使用反向代理到`http://localhost:8045/index.html`页面上
 
-访问`http://localhost/lua`页面将会显示`hello lua.`
+访问`http://localhost:8000/lua`页面将会显示`hello lua.`
 
-访问`http://localhost/status1`页面将会显示stub状态
+访问`http://localhost:8000/status1`页面将会显示stub状态
 
-访问`http://localhost/status2`页面将会显示upstream状态
+访问`http://localhost:8000/status2`页面将会显示upstream状态
 
 
