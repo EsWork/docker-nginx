@@ -18,7 +18,7 @@ ${WITH_DEBUG} && {
   EXTRA_ARGS="${EXTRA_ARGS} --with-debug"
 }
 
-mkdir -p ${NGINX_SETUP_DIR}
+#mkdir -p ${NGINX_SETUP_DIR}
 cd ${NGINX_SETUP_DIR}
 
 #build dependencies
