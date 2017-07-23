@@ -1,25 +1,10 @@
 #!/bin/sh
 set -e
 
-create_log_dir() {
-  mkdir -p ${NGINX_LOG_DIR}
-  chmod -R 0755 ${NGINX_LOG_DIR}
-  chown -R ${NGINX_USER}:root ${NGINX_LOG_DIR}
-}
-
-create_tmp_dir(){
-  mkdir -p ${NGINX_TEMP_DIR}
-  chown -R ${NGINX_USER}:root ${NGINX_TEMP_DIR}
-}
-
-create_siteconf_dir() {
-  mkdir -p ${NGINX_SITECONF_DIR}
-  chmod -R 755 ${NGINX_SITECONF_DIR}
-}
-
-create_log_dir
-create_tmp_dir
-create_siteconf_dir
+mkdir -p ${NGINX_LOG_DIR} ${NGINX_TEMP_DIR} ${NGINX_SITECONF_DIR}
+chmod -R 0755 ${NGINX_LOG_DIR} 
+chmod -R 0755 ${NGINX_SITECONF_DIR}
+chown -R $UID:$GID $NGINX_LOG_DIR $NGINX_TEMP_DIR /etc/nginx /var/www
 
 #允许参数传递到nginx
 if [[ "${1:0:1}" = '-' ]]; then
@@ -35,7 +20,8 @@ fi
 
 if [[ -z "${1}" ]]; then
   echo "Starting nginx..."
-  exec $(which nginx) -c /etc/nginx/nginx.conf -g "daemon off;" ${EXTRA_ARGS}
+  #exec su-exec $UID:$GID /sbin/tini -- nginx
+  exec su-exec $UID:$GID $(which nginx) -g "daemon off;" ${EXTRA_ARGS}
 else
   exec "$@"
 fi

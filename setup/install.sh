@@ -1,7 +1,11 @@
 #!/bin/sh
 set -e
 
-#sed '1i\http://mirrors.ustc.edu.cn/alpine/v3.5/main/' /etc/apk/repositories
+# cat > /etc/apk/repositories <<EOF
+# https://mirrors.ustc.edu.cn/alpine/latest-stable/main
+# https://mirrors.ustc.edu.cn/alpine/latest-stable/community
+# EOF
+# apk update 
 
 NGINX_DOWNLOAD_URL="http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz"
 NGINX_DEVEL_KIT_URL="https://github.com/simpl/ngx_devel_kit/archive/v${NGINX_DEVEL_KIT_VERSION}.tar.gz"
@@ -9,16 +13,18 @@ LUA_URL="https://github.com/openresty/lua-nginx-module/archive/v${LUA_MODULE_VER
 NGINX_CACHE_PURGE_URL="https://github.com/FRiCKLE/ngx_cache_purge/archive/${NGINX_CACHE_PURGE_VERSION}.tar.gz"
 NGINX_UPSTREAM_CHECK_URL="https://github.com/yaoweibin/nginx_upstream_check_module/archive/master.tar.gz"
 MAXMIND_URL="https://github.com/maxmind/geoip-api-c/releases/download/v${GEOIP_VERSION}/GeoIP-${GEOIP_VERSION}.tar.gz"
+HEADERS_MORE_URL="https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz"
 
-BUILD_DEPENDENCIES="gcc patch libc-dev make openssl-dev \
-curl pcre-dev zlib-dev linux-headers luajit-dev \
-gnupg libxslt-dev gd-dev perl-dev git geoip-dev ca-certificates"
+BUILD_DEPENDENCIES="build-base linux-headers ca-certificates \
+patch openssl-dev cmake autoconf automake go \
+curl pcre-dev zlib-dev luajit-dev libtool \
+gnupg libxslt-dev gd-dev perl-dev git geoip-dev git"
 
 ${WITH_DEBUG} && {
   EXTRA_ARGS="${EXTRA_ARGS} --with-debug"
 }
 
-#mkdir -p ${NGINX_SETUP_DIR}
+mkdir -p ${NGINX_SETUP_DIR}
 cd ${NGINX_SETUP_DIR}
 
 #build dependencies
@@ -46,6 +52,7 @@ ${WITH_UPSTREAM_CHECK} && {
   tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/ngx_upstream_check.tar"
 }
 
+#lua module support
 ${WITH_LUA} && {
   EXTRA_ARGS="${EXTRA_ARGS} --add-module=${NGINX_SETUP_DIR}/lua-nginx-module-${LUA_MODULE_VERSION}"
 
@@ -56,17 +63,28 @@ ${WITH_LUA} && {
   export LUAJIT_INC=/usr/include/luajit-2.1
 }
 
+#headers-more module support
+EXTRA_ARGS="${EXTRA_ARGS} --add-module=${NGINX_SETUP_DIR}/headers-more-nginx-module-${HEADERS_MORE_VERSION}"
+curl -fSL "${HEADERS_MORE_URL}" -o "${NGINX_SETUP_DIR}/headers-more-nginx-module-${HEADERS_MORE_VERSION}.tar.gz"
+tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/headers-more-nginx-module-${HEADERS_MORE_VERSION}.tar.gz"
+
+#ngx_brotli module support
+EXTRA_ARGS="${EXTRA_ARGS} --add-module=${NGINX_SETUP_DIR}/ngx_brotli"
+git clone https://github.com/bagder/libbrotli --depth=1 ${NGINX_SETUP_DIR}/libbrotli
+cd "${NGINX_SETUP_DIR}/libbrotli"
+./autogen.sh && ./configure && make -j $(getconf _NPROCESSORS_ONLN) && make install
+git clone --depth=1 https://github.com/google/ngx_brotli  "${NGINX_SETUP_DIR}/ngx_brotli"
+cd "${NGINX_SETUP_DIR}/ngx_brotli"
+git submodule update --init
+
 # install geoip
 curl -fSL $MAXMIND_URL -o "${NGINX_SETUP_DIR}/geoip_module.tar"
 tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/geoip_module.tar"
 cd ${NGINX_SETUP_DIR}/GeoIP-${GEOIP_VERSION}
-./configure && make && make check && make install 
+./configure && make -j $(getconf _NPROCESSORS_ONLN) && make check && make install 
 
-#nginx user role
+#nginx default www
 mkdir -p /var/www/nginx
-addgroup -S ${NGINX_USER}
-adduser -D -S -h /var/www/nginx \
-  -u 1000 -s /sbin/nologin -G ${NGINX_USER} ${NGINX_USER}
 
 #build nginx
 curl -fSL "${NGINX_DOWNLOAD_URL}" -o "${NGINX_SETUP_DIR}/nginx.tar"
@@ -74,6 +92,25 @@ tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/nginx.tar"
 
 cd ${NGINX_SETUP_DIR}/nginx-${NGINX_VERSION}
 
+curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o "${NGINX_SETUP_DIR}/nginx.tar.gz.asc" 
+export GNUPGHOME="$(mktemp -d)"
+found='';
+for server in \
+		ha.pool.sks-keyservers.net \
+		hkp://keyserver.ubuntu.com:80 \
+		hkp://p80.pool.sks-keyservers.net:80 \
+		pgp.mit.edu \
+	; do \
+		echo "Fetching GPG key $GPG_KEYS from $server"; \
+		gpg --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$GPG_KEYS" && found=yes && break; \
+	done;
+
+test -z "$found" && echo >&2 "error: failed to fetch GPG key $GPG_KEYS" && exit 1;
+gpg --batch --verify "${NGINX_SETUP_DIR}/nginx.tar.gz.asc"  "${NGINX_SETUP_DIR}/nginx.tar"
+rm -r "$GNUPGHOME" "${NGINX_SETUP_DIR}/nginx.tar.gz.asc"
+
+
+#nginx_upstream_check_module patch
 if [[ ${WITH_UPSTREAM_CHECK} ]];then
    patch -p0 < ${NGINX_SETUP_DIR}/nginx_upstream_check_module-master/check_1.11.5+.patch
 fi
@@ -86,9 +123,7 @@ fi
   --http-log-path=/var/log/nginx/access.log \
   --error-log-path=/var/log/nginx/error.log \
   --lock-path=/var/lock/nginx.lock \
-  --pid-path=/run/nginx.pid \
-  --user=${NGINX_USER} \
-  --group=${NGINX_USER} \
+  --pid-path=/tmp/nginx.pid \
   --http-client-body-temp-path=${NGINX_TEMP_DIR}/body \
   --http-fastcgi-temp-path=${NGINX_TEMP_DIR}/fastcgi \
   --http-proxy-temp-path=${NGINX_TEMP_DIR}/proxy \
@@ -137,8 +172,8 @@ cp ${NGINX_SETUP_DIR}/test.conf /etc/nginx/
 
 cat > ${NGINX_SITECONF_DIR}/default.conf <<EOF
 server {
-  listen 80 default_server;
-  listen [::]:80 default_server ipv6only=on;
+  listen 8000 default_server;
+  listen [::]:8000 default_server ipv6only=on;
   server_name localhost;
 
   root /var/www/nginx/html;
@@ -171,6 +206,7 @@ RUN_DEPENDENCIES="$( \
 			| xargs -r apk info --installed \
 			| sort -u \
 )"
+RUN_DEPENDENCIES="$RUN_DEPENDENCIES su-exec"
 echo "install rundeps $RUN_DEPENDENCIES"
 apk add --no-cache --virtual .nginx-rundeps $RUN_DEPENDENCIES
 
@@ -180,7 +216,3 @@ apk del .gettext
 mv /tmp/envsubst /usr/local/bin/
 cd /
 rm -rf ${NGINX_SETUP_DIR}/
-
-# forward request and error logs to docker log collector
-ln -sf /dev/stdout /var/log/nginx/access.log
-ln -sf /dev/stderr /var/log/nginx/error.log
