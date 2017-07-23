@@ -9,7 +9,6 @@ Introduction
 ---
 
 Nginx 镜像集成模块列表：
-- pagespeed
 - luaJIT
 - lua-nginx-module
 - nginx_upstream_check_module
