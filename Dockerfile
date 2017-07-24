@@ -30,7 +30,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 8000/tcp 4430/tcp
 
-VOLUME ["${NGINX_SITECONF_DIR}","/etc/nginx/conf.d","etc/nginx/certs","/var/log/nginx","/var/www"]
+VOLUME ["${NGINX_SITECONF_DIR}","/etc/nginx/conf.d","/etc/nginx/certs","/var/log/nginx","/var/www"]
 
 LABEL description="nginx built from source" \
       nginx="nginx ${NGINX_VERSION}" \
