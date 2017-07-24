@@ -4,9 +4,6 @@ ENV UID=1000 GID=1000 \
     GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 
     NGINX_VERSION=1.12.1 \
-    LUA_MODULE_VERSION=0.10.9rc8  \
-    NGINX_DEVEL_KIT_VERSION=0.3.0 \
-    NGINX_CACHE_PURGE_VERSION=2.3 \
     GEOIP_VERSION=1.6.11 \
     HEADERS_MORE_VERSION=0.32 \
     NGINX_CONF_DIR=/etc/nginx \
@@ -14,13 +11,10 @@ ENV UID=1000 GID=1000 \
     NGINX_TEMP_DIR=/var/cache/nginx \
     NGINX_SETUP_DIR=/usr/src/nginx
 
-LABEL description="nginx built from source" \
+LABEL description="lightweight nginx built from source" \
       nginx="nginx ${NGINX_VERSION}" \
       maintainer="JohnWu <v.la@live.cn>"
 
-ARG WITH_NDK=true
-ARG WITH_LUA=true
-ARG WITH_PURGE=true
 ARG WITH_UPSTREAM_CHECK=true
 
 #china mirrors repos
@@ -43,34 +37,11 @@ RUN mkdir -p \
     gnupg libxslt-dev gd-dev perl-dev git geoip-dev git" \
 && apk -U upgrade && apk add --no-cache --virtual .build-deps ${BUILD_DEPS} \
 && \
-# ngx_devel_kit module
-    if [[ ${WITH_NDK} ]];then \
-        NGINX_MODULES="${NGINX_MODULES} --add-module=${NGINX_SETUP_DIR}/ngx_devel_kit-${NGINX_DEVEL_KIT_VERSION}"; \
-        curl -fSL https://github.com/simpl/ngx_devel_kit/archive/v${NGINX_DEVEL_KIT_VERSION}.tar.gz -o "${NGINX_SETUP_DIR}/ngx_devel_kit.tar"; \
-        tar -zxC  "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/ngx_devel_kit.tar"; \
-    fi \
-&& \
-# ngx_cache_purge module
-    if [[ ${WITH_PURGE} ]];then \
-        NGINX_MODULES="${NGINX_MODULES} --add-module=${NGINX_SETUP_DIR}/ngx_cache_purge-${NGINX_CACHE_PURGE_VERSION}"; \
-        curl -fSL https://github.com/FRiCKLE/ngx_cache_purge/archive/${NGINX_CACHE_PURGE_VERSION}.tar.gz -o "${NGINX_SETUP_DIR}/ngx_cache_purge.tar"; \
-        tar -zxC  "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/ngx_cache_purge.tar"; \
-    fi \
-&& \
 # ngx_upstream_check module
     if [[ ${WITH_UPSTREAM_CHECK} ]];then \
         NGINX_MODULES="${NGINX_MODULES} --add-module=${NGINX_SETUP_DIR}/nginx_upstream_check_module-master"; \
         curl -fSL https://github.com/yaoweibin/nginx_upstream_check_module/archive/master.tar.gz -o "${NGINX_SETUP_DIR}/ngx_upstream_check.tar"; \
         tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/ngx_upstream_check.tar"; \
-    fi \
-&& \
-# lua module
-    if [[ ${WITH_UPSTREAM_CHECK} ]];then \
-        NGINX_MODULES="${NGINX_MODULES} --add-module=${NGINX_SETUP_DIR}/lua-nginx-module-${LUA_MODULE_VERSION}"; \
-        curl -fSL https://github.com/openresty/lua-nginx-module/archive/v${LUA_MODULE_VERSION}.tar.gz -o "lua_module.tar"; \
-        tar -zxC "${NGINX_SETUP_DIR}" -f "${NGINX_SETUP_DIR}/lua_module.tar"; \
-        export LUAJIT_LIB=/usr/lib; \
-        export LUAJIT_INC=/usr/include/luajit-2.1; \
     fi \
 
 # headers-more module
@@ -137,6 +108,7 @@ fi \
   --with-pcre \
   --with-pcre-jit \
   --with-http_ssl_module \
+  --with-http_v2_module \
   --with-http_stub_status_module \
   --with-http_realip_module \
   --with-http_auth_request_module \
@@ -148,25 +120,21 @@ fi \
   --with-http_gunzip_module \
   --with-http_gzip_static_module \
   --with-http_degradation_module \
-  --with-http_v2_module \
   --with-http_sub_module \
   --with-http_flv_module \
   --with-http_mp4_module \
   --with-http_slice_module \
-  --with-stream \
-  --with-stream_ssl_module \
-  --with-stream_ssl_preread_module \
-  --with-stream_realip_module \
-  --with-stream_geoip_module=dynamic \
-  --with-mail \
-  --with-mail_ssl_module \
   --with-threads \
   --with-file-aio \
   --with-compat \
-  --with-http_xslt_module=dynamic \
-  --with-http_image_filter_module=dynamic \
   --with-http_geoip_module=dynamic \
-  --with-http_perl_module=dynamic \
+  --without-http_ssi_module \
+  --without-http_scgi_module \
+  --without-http_uwsgi_module \
+  --without-http_geo_module \
+  --without-http_split_clients_module \
+  --without-http_memcached_module \
+  --without-http_empty_gif_module \
   ${NGINX_MODULES} \
 && make -j $NB_CORES && make install \
 

@@ -4,5 +4,3 @@ LICENSE
 Makefile
 VERSION
 .travis.yml
-.nginx.conf
-test.conf

@@ -1,10 +1,9 @@
 #!/bin/sh
 set -e
 
-mkdir -p ${NGINX_LOG_DIR} ${NGINX_TEMP_DIR} ${NGINX_SITECONF_DIR}
 chmod -R 0755 ${NGINX_LOG_DIR} 
-chmod -R 0755 ${NGINX_SITECONF_DIR}
-chown -R $UID:$GID $NGINX_LOG_DIR $NGINX_TEMP_DIR /etc/nginx /var/www
+chmod -R 0755 ${NGINX_CONF_DIR}/sites-enabled
+chown -R $UID:$GID $NGINX_CONF_DIR $NGINX_LOG_DIR $NGINX_TEMP_DIR /etc/nginx /var/www
 
 #允许参数传递到nginx
 if [[ "${1:0:1}" = '-' ]]; then
