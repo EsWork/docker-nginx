@@ -18,8 +18,8 @@ LABEL description="lightweight nginx built from source" \
 ARG WITH_UPSTREAM_CHECK=true
 
 #china mirrors repos
-RUN echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/main" > /etc/apk/repositories \
-&&  echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/community" >> /etc/apk/repositories
+# RUN echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/main" > /etc/apk/repositories \
+# &&  echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/community" >> /etc/apk/repositories
 
 RUN mkdir -p \
     ${NGINX_SETUP_DIR} \
@@ -82,7 +82,6 @@ for server in \
 	done; \
    test -z "$found" && echo >&2 "error: failed to fetch GPG key $GPG_KEYS" && exit 1; \
    gpg --batch --verify "${NGINX_SETUP_DIR}/nginx.tar.gz.asc" "${NGINX_SETUP_DIR}/nginx.tar" \
-&& rm -r "$GNUPGHOME" "${NGINX_SETUP_DIR}/nginx.tar.gz.asc" \
 
 #nginx_upstream_check_module patch
 && if [[ ${WITH_UPSTREAM_CHECK} ]];then \
