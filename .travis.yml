@@ -7,12 +7,18 @@ branches:
 
 install:
   - docker build -t eswork/nginx .
+  - docker build -t eswork/nginx:lt .
   
 script: 
   - docker run --name nginx -d -p 30080:8000 eswork/nginx -c /etc/nginx/test.conf; sleep 5
+  - docker run --name nginx-lt -d -p 30081:8000 eswork/nginx:lt -c /etc/nginx/test.lt.conf; sleep 5
   - docker ps -a | grep -q nginx
+  - docker ps -a | grep -q nginx-lt
   - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30080/index.html
+  - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30081/index.html
   - curl -v http://127.0.0.1:30080/purge/index.html
   - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30080/lua
   - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30080/status1
+  - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30081/status1
   - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30080/status2
+  - curl --retry 5 --retry-delay 5 -v http://127.0.0.1:30081/status2
