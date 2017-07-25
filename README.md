@@ -3,7 +3,11 @@
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`latest` , `1.12.1`  (1.12.1/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile)
+- [`latest` , `1.12.1` (1.12.1/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile)
+- [(1.12.1-lt/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile.lt)
+
+* eswork/nginx  参考Features
+* eswork/nginx:lt 轻量化模块
 
 Features
 ---
