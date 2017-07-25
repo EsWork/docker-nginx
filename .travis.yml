@@ -1,12 +1,14 @@
+sudo: required
 language: bash
 services: docker
+dist: trusty
 
 branches: 
   only: 
     - master
 
-install:
-  - docker build -t eswork/nginx .
+before_install:
+  - docker build -t eswork/nginx -f Dockerfile .
   - docker build -t eswork/nginx:lt -f Dockerfile.lt .
   
 script: 
