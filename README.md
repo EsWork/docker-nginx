@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/EsWork/docker-nginx.svg?branch=master)](https://travis-ci.org/EsWork/docker-nginx) 
 
-Metadata from image  ||
--------- | :------------ |
+|Image Tag | Metadata from image |
+|--------- | :------------ |
 |[![](https://images.microbadger.com/badges/version/eswork/nginx.svg)](https://microbadger.com/images/eswork/nginx "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx.svg)](https://microbadger.com/images/eswork/nginx "Get your own image badge on microbadger.com")
 |[![](https://images.microbadger.com/badges/version/eswork/nginx:1.10.3.svg)](https://microbadger.com/images/eswork/nginx:1.10.3 "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.10.3.svg)](https://microbadger.com/images/eswork/nginx:1.10.3 "Get your own image badge on microbadger.com")
 |[![](https://images.microbadger.com/badges/version/eswork/nginx:1.12.1.svg)](https://microbadger.com/images/eswork/nginx:1.12.1 "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.12.1.svg)](https://microbadger.com/images/eswork/nginx:1.12.1 "Get your own image badge on microbadger.com")
