@@ -7,7 +7,7 @@ branches:
 
 install:
   - docker build -t eswork/nginx .
-  - docker build -t eswork/nginx:lt .
+  - docker build -t eswork/nginx:lt -f Dockerfile.lt .
   
 script: 
   - docker run --name nginx -d -p 30080:8000 eswork/nginx -c /etc/nginx/test.conf; sleep 5
