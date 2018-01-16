@@ -2,11 +2,8 @@
 
 |Image Tag | Metadata from image |
 |--------- | :------------ |
-|[![](https://images.microbadger.com/badges/version/eswork/nginx.svg)](https://microbadger.com/images/eswork/nginx "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx.svg)](https://microbadger.com/images/eswork/nginx "Get your own image badge on microbadger.com")
-|[![](https://images.microbadger.com/badges/version/eswork/nginx:1.10.3.svg)](https://microbadger.com/images/eswork/nginx:1.10.3 "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.10.3.svg)](https://microbadger.com/images/eswork/nginx:1.10.3 "Get your own image badge on microbadger.com")
-|[![](https://images.microbadger.com/badges/version/eswork/nginx:1.12.1.svg)](https://microbadger.com/images/eswork/nginx:1.12.1 "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.12.1.svg)](https://microbadger.com/images/eswork/nginx:1.12.1 "Get your own image badge on microbadger.com")  
+|[![](https://images.microbadger.com/badges/version/eswork/nginx.svg)](https://microbadger.com/images/eswork/nginx "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx.svg)](https://microbadger.com/images/eswork/nginx "Get your own image badge on microbadger.com") 
 |[![](https://images.microbadger.com/badges/version/eswork/nginx:1.12.2.svg)](https://microbadger.com/images/eswork/nginx:1.12.2 "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.12.2.svg)](https://microbadger.com/images/eswork/nginx:1.12.2 "Get your own image badge on microbadger.com")
-|[![](https://images.microbadger.com/badges/version/eswork/nginx:1.12.1-lt.svg)](https://microbadger.com/images/eswork/nginx:1.12.1-lt "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.12.1-lt.svg)](https://microbadger.com/images/eswork/nginx:1.12.1-lt "Get your own image badge on microbadger.com")  
 |[![](https://images.microbadger.com/badges/version/eswork/nginx:1.12.12-lt.svg)](https://microbadger.com/images/eswork/nginx:1.12.2-lt "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.12.2-lt.svg)](https://microbadger.com/images/eswork/nginx:1.12.2-lt "Get your own image badge on microbadger.com")
 
 ## Supported tags and respective `Dockerfile` links
