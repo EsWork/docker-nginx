@@ -5,12 +5,12 @@
 |[![](https://images.microbadger.com/badges/version/eswork/nginx.svg)](https://microbadger.com/images/eswork/nginx "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx.svg)](https://microbadger.com/images/eswork/nginx "Get your own image badge on microbadger.com") 
 |[![](https://images.microbadger.com/badges/version/eswork/nginx:1.12.2.svg)](https://microbadger.com/images/eswork/nginx:1.12.2 "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.12.2.svg)](https://microbadger.com/images/eswork/nginx:1.12.2 "Get your own image badge on microbadger.com")
 |[![](https://images.microbadger.com/badges/version/eswork/nginx:1.12.2-lt.svg)](https://microbadger.com/images/eswork/nginx:1.12.2-lt "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.12.2-lt.svg)](https://microbadger.com/images/eswork/nginx:1.12.2-lt "Get your own image badge on microbadger.com")
-|[![](https://images.microbadger.com/badges/version/eswork/nginx:1.40.0-lt.svg)](https://microbadger.com/images/eswork/nginx:1.40.0-lt "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.40.0-lt.svg)](https://microbadger.com/images/eswork/nginx:1.40.0-lt "Get your own image badge on microbadger.com")
+|[![](https://images.microbadger.com/badges/version/eswork/nginx:1.14.0-lt.svg)](https://microbadger.com/images/eswork/nginx:1.14.0-lt "Get your own version badge on microbadger.com")|[![](https://images.microbadger.com/badges/image/eswork/nginx:1.14.0-lt.svg)](https://microbadger.com/images/eswork/nginx:1.14.0-lt "Get your own image badge on microbadger.com")
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`latest` , `1.40.0` (1.40.0/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile)
-- [(1.40.0-lt/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile.lt)
+- [`latest` , `1.14.0` (1.14.0/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile)
+- [(1.14.0-lt/Dockerfile)](https://github.com/EsWork/docker-nginx/blob/master/Dockerfile.lt)
 
 * eswork/nginx  参考Features
 * eswork/nginx:lt 轻量化模块
