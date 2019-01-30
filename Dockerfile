@@ -2,7 +2,7 @@ FROM alpine:3.8
 
 ENV UID=1000 GID=1000 \
     GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
-    NGINX_VERSION=1.14.1 \
+    NGINX_VERSION=1.14.2 \
     LUA_MODULE_VERSION=0.10.9rc8  \
     NGINX_DEVEL_KIT_VERSION=0.3.0 \
     NGINX_CACHE_PURGE_VERSION=2.3 \
@@ -23,8 +23,8 @@ ARG WITH_PURGE=true
 ARG WITH_UPSTREAM_CHECK=true
 
 #china mirrors repos
-# RUN echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/main" > /etc/apk/repositories \
-# &&  echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/community" >> /etc/apk/repositories
+RUN echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/main" > /etc/apk/repositories \
+&&  echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/community" >> /etc/apk/repositories
 
 RUN mkdir -p \
     ${NGINX_SETUP_DIR} \
@@ -39,7 +39,7 @@ RUN mkdir -p \
     build-base linux-headers ca-certificates \
     patch openssl-dev cmake autoconf automake \
     curl pcre-dev zlib-dev luajit-dev libtool \
-    gnupg libxslt-dev gd-dev perl-dev git geoip-dev git" \
+    gnupg libxslt-dev gd-dev perl-dev git geoip-dev git" \ 
 && apk -U upgrade && apk add --no-cache --virtual .build-deps ${BUILD_DEPS} \
 && \
 # ngx_devel_kit module
@@ -183,7 +183,7 @@ fi \
 )" \
 && RUN_DEPENDENCIES="$RUN_DEPENDENCIES su-exec" \
 && echo "install rundeps $RUN_DEPENDENCIES" \
-&& apk add --no-cache --virtual .nginx-rundeps $RUN_DEPENDENCIES \
+&& apk add --no-cache --virtual .nginx-rundeps tzdata $RUN_DEPENDENCIES \
 
 # cleanup
 && apk del .build-deps \
